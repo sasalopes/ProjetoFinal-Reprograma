@@ -33,7 +33,11 @@ class EspacoSereno {
   }
 
   enviarMensagemDePacienteParaPaciente(origem, destino, conteudo) {
-    this.mensagens.push({ origem, destino, conteudo });
+    this.mensagens.push({
+      origem: origem.nome,  // Uso do nome ou 'Anônimo' conforme necessário
+      destino: destino.nome,
+      conteudo
+    });
   }
 
   enviarMensagem(pacienteDestino, conteudo) {

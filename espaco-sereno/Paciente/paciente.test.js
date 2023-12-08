@@ -5,6 +5,12 @@ const mockApp = {
   enviarMensagemDePacienteParaPaciente: jest.fn(),
 };
 
+// Exemplo de criação de paciente anônimo
+const pacienteAnonimo = new Paciente(null, true);
+
+// Exemplo de criação de paciente com nome
+const pacienteComNome = new Paciente('Nome do Paciente');
+
 // Teste para conectar um psicólogo
 test('Conectar psicólogo ao paciente', () => {
   const paciente = new Paciente('Ana');
