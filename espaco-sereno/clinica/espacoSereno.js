@@ -1,12 +1,14 @@
 const Psicologo = require('../Psicologo/psicologo');
 const Paciente = require('../Paciente/paciente');
 const AvaliacaoRiscos = require('../AvaliacaoRiscos/AvaliacaoRiscos');
+const AcompanharProgresso = require('../Progresso/acompanharProgresso');
 
 class EspacoSereno {
   constructor() {
     this.psicologos = [];
     this.pacientes = [];
     this.mensagens = [];
+    this.acompanharProgresso = new AcompanharProgresso();
   }
 
   cadastrarPsicologo(nome) {
@@ -22,7 +24,7 @@ class EspacoSereno {
   }
 
   associarPacienteComPsicologo(paciente, psicologo) {
-    if (this.#isValidPacientePsicologoPair(paciente, psicologo)) {
+    if (this.#ParValidoParaAssociacaoPacientePsicologo(paciente, psicologo)) {
       paciente.conectarPsicologo(psicologo);
       psicologo.conectarPaciente(paciente);
     } else {
@@ -42,7 +44,7 @@ class EspacoSereno {
     }
   }
 
-  #isValidPacientePsicologoPair(paciente, psicologo) {
+  #ParValidoParaAssociacaoPacientePsicologo(paciente, psicologo) {
     return paciente instanceof Paciente && psicologo instanceof Psicologo;
   }
 
@@ -51,7 +53,17 @@ class EspacoSereno {
     console.log(`O paciente ${paciente.nome} possui um nível de risco: ${nivelRisco}`);
     
   }
+ definirMeta(paciente, meta) {
+    this.acompanharProgresso.definirMeta(paciente, meta);
+  }
+
+  registrarMarco(paciente, marco) {
+    this.acompanharProgresso.registrarMarco(paciente, marco);
+  }
+
 }
+
+
 
 
 module.exports = EspacoSereno;
