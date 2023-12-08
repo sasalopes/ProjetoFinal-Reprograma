@@ -1,46 +1,49 @@
-const Psicologo = require('./psicologo')
-const Paciente = require ('./paciente')
+const Psicologo = require('./psicologo');
+const Paciente = require('./paciente');
 
 class EspacoSereno {
   constructor() {
-    // Inicializa o aplicativo com listas vazias de psicólogos, pacientes e mensagens.
     this.psicologos = [];
     this.pacientes = [];
     this.mensagens = [];
   }
 
-  // Cadastra um novo psicólogo e o adiciona à lista de psicólogos.
   cadastrarPsicologo(nome) {
-    const psicologo = new Psicologo(nome);
-    this.psicologos.push(psicologo);
-    return psicologo;
+    const novoPsicologo = new Psicologo(nome);
+    this.psicologos.push(novoPsicologo);
+    return novoPsicologo;
   }
 
-  // Cadastra um novo paciente e o adiciona à lista de pacientes.
   cadastrarPaciente(nome) {
-    const paciente = new Paciente(nome);
-    this.pacientes.push(paciente);
-    return paciente;
+    const novoPaciente = new Paciente(nome);
+    this.pacientes.push(novoPaciente);
+    return novoPaciente;
   }
 
-  // Associa um paciente a um psicólogo.
   associarPacienteComPsicologo(paciente, psicologo) {
-    paciente.conectarPsicologo(psicologo);
-    psicologo.conectarPaciente(paciente);
+    if (this._isValidPacientePsicologoPair(paciente, psicologo)) {
+      paciente.conectarPsicologo(psicologo);
+      psicologo.conectarPaciente(paciente);
+    } else {
+      console.error('Erro: Parâmetros inválidos para associarPacienteComPsicologo.');
+    }
   }
 
-  // Envia uma mensagem de um paciente para outro paciente.
   enviarMensagemDePacienteParaPaciente(origem, destino, conteudo) {
     this.mensagens.push({ origem, destino, conteudo });
   }
 
-  // Envia uma mensagem de um paciente para outro paciente.
-  enviarMensagem(pacienteDestino, conteudo, app) {
-    if (this.psicologo !== null) {
-      app.enviarMensagemDePacienteParaPaciente(this, pacienteDestino, conteudo);
+  enviarMensagem(pacienteDestino, conteudo) {
+    if (pacienteDestino.psicologo !== null) {
+      this.enviarMensagemDePacienteParaPaciente(this, pacienteDestino, conteudo);
     } else {
-      console.log('Erro: Paciente não associado a um psicólogo.');
+      console.error('Erro: Paciente não associado a um psicólogo.');
     }
   }
+
+  _isValidPacientePsicologoPair(paciente, psicologo) {
+    return paciente instanceof Paciente && psicologo instanceof Psicologo;
+  }
 }
-module.exports =  EspacoSereno ;
+
+module.exports = EspacoSereno;
