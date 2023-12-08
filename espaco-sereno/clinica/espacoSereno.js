@@ -1,5 +1,6 @@
-const Psicologo = require('./psicologo');
-const Paciente = require('./paciente');
+const Psicologo = require('../Psicologo/psicologo');
+const Paciente = require('../Paciente/paciente');
+const AvaliacaoRiscos = require('../AvaliacaoRiscos/AvaliacaoRiscos');
 
 class EspacoSereno {
   constructor() {
@@ -21,7 +22,7 @@ class EspacoSereno {
   }
 
   associarPacienteComPsicologo(paciente, psicologo) {
-    if (this._isValidPacientePsicologoPair(paciente, psicologo)) {
+    if (this.#isValidPacientePsicologoPair(paciente, psicologo)) {
       paciente.conectarPsicologo(psicologo);
       psicologo.conectarPaciente(paciente);
     } else {
@@ -41,9 +42,16 @@ class EspacoSereno {
     }
   }
 
-  _isValidPacientePsicologoPair(paciente, psicologo) {
+  #isValidPacientePsicologoPair(paciente, psicologo) {
     return paciente instanceof Paciente && psicologo instanceof Psicologo;
   }
+
+  avaliarRiscoDoPaciente(paciente) {
+    const nivelRisco = AvaliacaoRiscos.avaliarRisco(paciente);
+    console.log(`O paciente ${paciente.nome} possui um nível de risco: ${nivelRisco}`);
+    
+  }
 }
+
 
 module.exports = EspacoSereno;

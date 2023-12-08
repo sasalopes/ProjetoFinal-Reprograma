@@ -1,6 +1,5 @@
 const EspacoSereno  = require('./espacoSereno');
-const Psicologo = require('./psicologo'); 
-const Paciente = require('./paciente'); 
+
 
 // Testa a funcionalidade de enviar mensagem entre pacientes
 test('Enviar mensagem de paciente para paciente', () => {
