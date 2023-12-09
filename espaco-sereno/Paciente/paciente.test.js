@@ -1,41 +1,63 @@
 const Paciente = require('./paciente');
 
-// Mock para o objeto de aplicativo 
-const mockApp = {
-  enviarMensagemDePacienteParaPaciente: jest.fn(),
-};
+describe('Paciente', () => {
+  it('deve criar um paciente com nome padrão quando não fornecido', () => {
+    const paciente = new Paciente();
+    expect(paciente.nome).toBe('Anônimo');
+  });
 
-// Exemplo de criação de paciente anônimo
-const pacienteAnonimo = new Paciente(null, true);
 
-// Exemplo de criação de paciente com nome
-const pacienteComNome = new Paciente('Nome do Paciente');
+  it('deve criar um paciente com o nome fornecido', () => {
+    const nome = 'João';
+    const paciente = new Paciente(nome);
+    expect(paciente.nome).toBe(nome);
+  });
 
-// Teste para conectar um psicólogo
-test('Conectar psicólogo ao paciente', () => {
-  const paciente = new Paciente('Ana');
-  const psicologo = { nome: 'Dr. Silva' };
+  it('deve conectar a um psicólogo', () => {
+    const paciente = new Paciente('Maria');
+    const psicologo = { nome: 'Dr. Silva' };
 
-  // Conectar o psicólogo ao paciente
-  paciente.conectarPsicologo(psicologo);
+    paciente.conectarPsicologo(psicologo);
 
-  // Verificar se o psicólogo está associado ao paciente
-  expect(paciente.psicologo).toBe(psicologo);
-});
+    expect(paciente.psicologo).toBe(psicologo);
+  });
 
-// Teste para enviar mensagem
-test('Enviar mensagem de paciente para paciente', () => {
-  const paciente1 = new Paciente('Ana');
-  const paciente2 = new Paciente('Carlos');
+  it('deve definir um novo nome para o paciente', () => {
+    const paciente = new Paciente('Carlos');
+    const novoNome = 'Carlos Silva';
 
-  // Conectar ambos os pacientes ao mesmo psicólogo
-  const psicologo = { nome: 'Dr. Silva' };
-  paciente1.conectarPsicologo(psicologo);
-  paciente2.conectarPsicologo(psicologo);
+    paciente.nome = novoNome;
 
-  // Chamar o método enviarMensagem
-  paciente1.enviarMensagem(paciente2, 'Olá, Carlos!', mockApp);
+    expect(paciente.nome).toBe(novoNome);
+  });
 
-  // Verificar se o método de enviar mensagem foi chamado corretamente
-  expect(mockApp.enviarMensagemDePacienteParaPaciente).toHaveBeenCalledWith(paciente1, paciente2, 'Olá, Carlos!');
+  it('deve enviar mensagem para outro paciente se associado a um psicólogo', () => {
+    const pacienteRemetente = new Paciente('Fernanda');
+    const pacienteDestino = new Paciente('Lucas');
+    const mockApp = {
+      enviarMensagemDePacienteParaPaciente: jest.fn(),
+    };
+
+    pacienteRemetente.conectarPsicologo({ nome: 'Dr. Souza' });
+    pacienteRemetente.enviarMensagem(pacienteDestino, 'Olá', mockApp);
+
+    expect(mockApp.enviarMensagemDePacienteParaPaciente).toHaveBeenCalledWith(
+      pacienteRemetente,
+      pacienteDestino,
+      'Olá'
+    );
+  });
+
+it('deve exibir um erro ao tentar enviar mensagem sem estar associado a um psicólogo', () => {
+    const pacienteRemetente = new Paciente('Ana');
+    const pacienteDestino = new Paciente('José');
+    const mockConsoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    pacienteRemetente.enviarMensagem(pacienteDestino, 'Oi', {});
+
+    expect(mockConsoleError).toHaveBeenCalledWith('Erro: Paciente não associado a um psicólogo.');
+
+    // Restaura a implementação original do console.error
+    mockConsoleError.mockRestore();
+  });
 });

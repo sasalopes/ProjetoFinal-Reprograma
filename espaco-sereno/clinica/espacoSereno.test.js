@@ -1,6 +1,5 @@
 const EspacoSereno  = require('./espacoSereno');
 
-
 // Testa a funcionalidade de enviar mensagem entre pacientes
 test('Enviar mensagem de paciente para paciente', () => {
   // Cria uma instância do aplicativo EspacoSereno
@@ -23,4 +22,16 @@ test('Enviar mensagem de paciente para paciente', () => {
   expect(app.mensagens[0].origem).toBe(paciente1);
   expect(app.mensagens[0].destino).toBe(paciente2);
   expect(app.mensagens[0].conteudo).toBe('Olá, Carlos!');
+
+  test('Cadastrar Psicologo', () => {
+  const espacoSereno = new EspacoSereno();
+  const novoPsicologo = espacoSereno.cadastrarPsicologo('Psicólogo 1');
+  expect(espacoSereno.psicologos).toContainEqual(novoPsicologo);
+});
+
+test('Cadastrar Paciente', () => {
+  const espacoSereno = new EspacoSereno();
+  const novoPaciente = espacoSereno.cadastrarPaciente('Paciente 1');
+  expect(espacoSereno.pacientes).toContainEqual(novoPaciente);
+});
 });

@@ -7,6 +7,8 @@ class Psicologo {
   conectarPaciente(paciente) {
     this.pacientes.push(paciente);
   }
+
 }
+
 
 module.exports = Psicologo;
